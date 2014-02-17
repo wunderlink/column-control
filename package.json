@@ -1,0 +1,19 @@
+{
+  "name": "column-control",
+  "version": "0.0.0",
+  "description": "decorate an html table with basic column controls",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.lincx.me:modules/column-control.git"
+  },
+  "keywords": [
+    "table",
+    "columns"
+  ],
+  "author": "Tyler Bushnell",
+  "license": "ISC"
+}
