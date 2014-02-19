@@ -4,16 +4,25 @@
   "description": "decorate an html table with basic column controls",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git@git.lincx.me:modules/column-control.git"
+  },
+  "devDependencies": {
+    "browserify": "~2.35.1",
+    "coffee-script": "~1.6.3",
+    "coffeeify": "~0.5.2"
   },
   "keywords": [
     "table",
     "columns"
   ],
   "author": "Tyler Bushnell",
-  "license": "BSD"
+  "license": "BSD",
+  "browserify": {
+    "transform": "coffeeify"
+  }
+
 }
