@@ -1,0 +1,59 @@
+.ch-active {
+  float:left;
+  border: 1px solid #aaa;
+  border-left: 0px;
+  min-height: 29px;
+  min-width: 169px;
+}
+.ch-control {
+  float:left;
+  height: 17px;
+  font-size: 11px;
+  border: 1px solid #aaa;
+  padding: 3px;
+  margin: 2px;
+  background-color: #CCC;
+}
+.ch-control > div {
+  padding: 2px;
+  float:left;
+}
+.ch-list {
+  background: #fff;
+  position: absolute;
+  left: 0px;
+  border: 1px solid #aaa;
+  border-top: 0px;
+  width: 200px;
+  -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+  -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+}
+.ch-list > ul {
+  list-style: none;
+  max-height: 300px;
+  overflow: auto;
+  padding: 0px;
+  margin: 0px;
+}
+.ch-list li {
+  padding: 4px 4px 4px 6px;
+}
+.ch-mini-btn {
+  color: #999;
+}
+
+.ch-down-arrow {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  padding: 5px 10px 5px 10px;
+  height: 19px;
+  width: 10px;
+  font-family: "arial";
+}
+
+
+.ch-list-holder {
+  position: relative;
+  float: left;
+}

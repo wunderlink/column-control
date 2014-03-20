@@ -1,4 +1,5 @@
 
+require('./style.css')
 
 
 module.exports = (opts={}) ->
@@ -30,7 +31,9 @@ class ColumnControl
             data.default = 1
           else
             data.default = 0
-      data.default = 1
+      else
+        @selectAll = 1
+        data.default = 1
 
   addTableNav: (table) ->
     rows = table.querySelectorAll('tr')
@@ -44,38 +47,52 @@ class ColumnControl
 
   buildCheckboxSelect: (list) ->
     @controlHolder = document.createElement('div')
-    @controlHolder.appendChild @buildSelectField()
-    @controlHolder.appendChild @buildList list
+    downArrow = document.createElement('div')
+    downArrow.className = 'ch-down-arrow'
+    downArrow.innerHTML = 'v'
+
+    _this = @
+    downArrow.onclick = (e) ->
+      target = _this.controlHolder.querySelector('.ch-list')
+      if target.style.display == "none"
+        target.style.display = ""
+      else
+        target.style.display = "none"
+    listHolder = document.createElement('div')
+    listHolder.className = 'ch-list-holder'
+    listHolder.appendChild downArrow
+
+    activeField = @buildSelectField()
+
+    listHolder.appendChild @buildList list, activeField
+    @controlHolder.appendChild listHolder
+    @controlHolder.appendChild activeField
     return @controlHolder
 
   buildSelectField: ->
     b = document.createElement('div')
     b.className = 'ch-active'
-    b.style.border = '1px solid #666'
-    b.style.minHeight = '20px'
-    _this = @
-    b.onclick = (e) ->
-      target = _this.controlHolder.querySelector('.ch-list')
-      console.log target
-      if target.style.display == "none"
-        target.style.display = ""
-      else
-        target.style.display = "none"
     return b
 
-  buildList: (list) ->
+  buildList: (list, activeField) ->
     div = document.createElement('div')
     div.style.display = 'none'
     div.className = 'ch-list'
     ul = document.createElement('ul')
-    ul.style.maxHeight = "300px"
+
+    selectAll =
+      index: 'sa'
+      title: 'Select All'
+      default: @selectAll
+    sa = @buildOption selectAll
+    ul.appendChild sa
+
     for data in list
       li = @buildOption data
       ul.appendChild li
 
       control = @buildControl data
-      acts = @controlHolder.querySelector('.ch-active')
-      acts.appendChild control
+      activeField.appendChild control
     div.appendChild ul
     return div
 
@@ -94,12 +111,11 @@ class ColumnControl
       else
         target = e.target
       index = @getAttribute('data-index')
-      make_visible = 0
-      if _this.table.querySelector('.c'+index).style.display == 'none'
-        make_visible = 1
-      _this.updateActive index, make_visible
+      _this.selectOption index
     ch = document.createElement('input')
     ch.type = 'checkbox'
+    if data.default
+      ch.checked = true
 
     la = document.createElement('label')
     la.innerHTML = data.title
@@ -110,12 +126,26 @@ class ColumnControl
 
   buildControl: (data) ->
     div = document.createElement('div')
-    div.innerHTML = data.title
     div.className = 'o'+data.index
+    div.className += ' ch-control'
     div.setAttribute('data-index', data.index)
 
+    left = document.createElement('div')
+    left.className = 'ch-mini-btn'
+    left.innerHTML = '<'
+    left.onclick = (e) ->
+      e.stopPropagation()
+      index = @.parentNode.getAttribute('data-index')
+      _this.moveColumn index, 'left'
+    div.appendChild left
+
+    title = document.createElement('div')
+    title.innerHTML = data.title
+    div.appendChild title
+
     x = document.createElement('div')
-    x.innerHTML = 'X'
+    x.className = 'ch-mini-btn'
+    x.innerHTML = 'x'
     _this = @
     x.onclick = (e) ->
       e.stopPropagation()
@@ -123,21 +153,14 @@ class ColumnControl
       _this.updateActive index, 0
     div.appendChild x
 
-    left = document.createElement('div')
-    left.innerHTML = '>'
-    left.onclick = (e) ->
+    right = document.createElement('div')
+    right.className = 'ch-mini-btn'
+    right.innerHTML = '>'
+    right.onclick = (e) ->
       e.stopPropagation()
       index = @.parentNode.getAttribute('data-index')
       _this.moveColumn index, 'right'
-    div.appendChild left
-
-    left = document.createElement('div')
-    left.innerHTML = '<'
-    left.onclick = (e) ->
-      e.stopPropagation()
-      index = @.parentNode.getAttribute('data-index')
-      _this.moveColumn index, 'left'
-    div.appendChild left
+    div.appendChild right
 
     return div
 
@@ -158,6 +181,20 @@ class ColumnControl
         next = cell[target]
         cell.parentNode.insertBefore( cell, next[target] )
     
+  selectOption: (index) ->
+    if index == 'sa'
+      input = @controlHolder.querySelector('.o'+index+' input[type="checkbox"]')
+      turn_on = false
+      if input.checked == true
+        turn_on = true
+      console.log turn_on
+      for item in @cols
+        @updateActive item.index, turn_on
+    else
+      turn_on = 0
+      if @table.querySelector('.c'+index).style.display == 'none'
+        turn_on = 1
+      @updateActive index, turn_on
 
   updateActive: (index, turn_on) ->
     input = @controlHolder.querySelector('.o'+index+' input[type="checkbox"]')
@@ -167,6 +204,8 @@ class ColumnControl
       input.checked = true
       control.style.display = ''
     else
+      sa = @controlHolder.querySelector('.osa input[type="checkbox"]')
+      sa.checked = false
       input.checked = false
       control.style.display = 'none'
     @toggleColumn(index, turn_on)
