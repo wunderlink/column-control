@@ -4,6 +4,7 @@
   "description": "decorate an html table with basic column controls",
   "main": "index.js",
   "scripts": {
+    "example": "beefy example/basic.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,7 +14,9 @@
   "devDependencies": {
     "browserify": "~2.35.1",
     "coffee-script": "~1.6.3",
-    "coffeeify": "~0.5.2"
+    "beefy": "~0.4.2",
+    "coffeeify": "~0.5.2",
+    "cssify": "~0.4.1"
   },
   "keywords": [
     "table",
@@ -21,7 +24,11 @@
   ],
   "author": "Tyler Bushnell",
   "license": "BSD",
+  "browser": "./lib/index.coffee",
   "browserify": {
-    "transform": "coffeeify"
+    "transform": [
+      "coffeeify",
+      "cssify"
+    ]
   }
 }
