@@ -39,6 +39,12 @@
 .ch-list li {
   padding: 4px 4px 4px 6px;
 }
+.ch-list li * {
+  display: inline;
+}
+.ch-list li label {
+  padding: 0px 0px 0px 5px;
+}
 .ch-mini-btn {
   color: #999;
 }
@@ -52,8 +58,11 @@
   font-family: "arial";
 }
 
-
 .ch-list-holder {
   position: relative;
   float: left;
+}
+
+.ch-holder {
+  line-height: normal;
 }

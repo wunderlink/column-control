@@ -47,6 +47,7 @@ class ColumnControl
 
   buildCheckboxSelect: (list) ->
     @controlHolder = document.createElement('div')
+    @controlHolder.className = 'ch-holder'
     downArrow = document.createElement('div')
     downArrow.className = 'ch-down-arrow'
     downArrow.innerHTML = 'v'
