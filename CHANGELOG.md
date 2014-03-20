@@ -1,4 +1,9 @@
 
+0.0.5 / 2014-03-20
+===================
+  - moved cssify to dependencies
+
+
 0.0.4 / 2014-03-20
 ===================
   - added styles, select all, and dropdown button
