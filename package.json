@@ -16,6 +16,8 @@
     "coffee-script": "~1.6.3",
     "beefy": "~0.4.2",
     "coffeeify": "~0.5.2",
+  },
+  "dependencies": {
     "cssify": "~0.4.1"
   },
   "keywords": [
