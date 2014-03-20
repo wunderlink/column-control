@@ -26,11 +26,10 @@ class ColumnControl
   getDefaults: (opts) ->
     for data in @cols
       if opts.default_columns?
+        data.default = 0
         for title in opts.default_columns
           if data.title == title
             data.default = 1
-          else
-            data.default = 0
       else
         @selectAll = 1
         data.default = 1
@@ -188,7 +187,6 @@ class ColumnControl
       turn_on = false
       if input.checked == true
         turn_on = true
-      console.log turn_on
       for item in @cols
         @updateActive item.index, turn_on
     else
@@ -226,7 +224,6 @@ class ColumnControl
     @cols = []
     for cell, i in headers
       title = cell.innerHTML.trim()
-      console.log title
       @cols.push
         index: i
         title: title
