@@ -1,4 +1,9 @@
 
+
+0.0.8 / 2014-03-24
+===================
+  - added ability to insert additional controls into column control tags
+
 0.0.7 / 2014-03-20
 ===================
   - fixed default columns

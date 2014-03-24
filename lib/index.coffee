@@ -15,24 +15,36 @@ class ColumnControl
 
     controls = ''
     _this = @
-    @getColumnHeaders ->
-      _this.getDefaults opts
-      controls = _this.buildCheckboxSelect _this.cols
-    for data in @cols
+    if opts.columns?
+      @cols = opts.columns
+      console.log @cols
+      controls = @getControls opts, @cols
+    else
+      @getColumnHeaders ->
+        controls = _this.getControls opts, _this.cols
+    return controls
+
+  getControls: (opts, cols) ->
+    @getDefaults opts, cols
+    controls = @buildCheckboxSelect cols
+    for data in cols
       @updateActive data.index, data.default
       @toggleColumn data.index, data.default
     return controls
 
-  getDefaults: (opts) ->
-    for data in @cols
-      if opts.default_columns?
-        data.default = 0
-        for title in opts.default_columns
-          if data.title == title
-            data.default = 1
-      else
-        @selectAll = 1
-        data.default = 1
+  getDefaults: (opts, cols) ->
+    for i, col of cols
+      if !col.index?
+        col.index = i
+      if !col.default?
+        if opts.default_columns?
+          col.default = 0
+          for title in opts.default_columns
+            if col.title == title
+              col.default = 1
+        else
+          @selectAll = 1
+          col.default = 1
 
   addTableNav: (table) ->
     rows = table.querySelectorAll('tr')
@@ -49,7 +61,7 @@ class ColumnControl
     @controlHolder.className = 'ch-holder'
     downArrow = document.createElement('div')
     downArrow.className = 'ch-down-arrow'
-    downArrow.innerHTML = 'v'
+    downArrow.innerHTML = '+'
 
     _this = @
     downArrow.onclick = (e) ->
@@ -90,10 +102,10 @@ class ColumnControl
     for data in list
       li = @buildOption data
       ul.appendChild li
-
       control = @buildControl data
       activeField.appendChild control
     div.appendChild ul
+    console.log div
     return div
 
   buildOption: (data) ->
@@ -162,6 +174,11 @@ class ColumnControl
       _this.moveColumn index, 'right'
     div.appendChild right
 
+    if data.additional_control?
+      d = document.createElement('br')
+      div.appendChild d
+      div.appendChild data.additional_control
+
     return div
 
   moveColumn: (index, dir) ->
@@ -216,7 +233,6 @@ class ColumnControl
         cell.style.display = ""
       else
         cell.style.display = "none"
-
 
   getColumnHeaders: (cb) ->
     first = @table.querySelector('tr')

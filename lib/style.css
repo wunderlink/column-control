@@ -1,13 +1,12 @@
 .ch-active {
   float:left;
   border: 1px solid #aaa;
-  border-left: 0px;
   min-height: 29px;
   min-width: 169px;
 }
 .ch-control {
   float:left;
-  height: 17px;
+  height: 40px;
   font-size: 11px;
   border: 1px solid #aaa;
   padding: 3px;
@@ -52,6 +51,7 @@
 .ch-down-arrow {
   background-color: #fff;
   border: 1px solid #aaa;
+  border-right: 0px;
   padding: 5px 10px 5px 10px;
   height: 19px;
   width: 10px;
