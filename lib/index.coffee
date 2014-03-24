@@ -33,6 +33,11 @@ class ColumnControl
     return controls
 
   getDefaults: (opts, cols) ->
+    d = true
+    for i, col of cols
+      if col.default?
+        d = false
+
     for i, col of cols
       if !col.index?
         col.index = i
@@ -44,7 +49,7 @@ class ColumnControl
               col.default = 1
         else
           @selectAll = 1
-          col.default = 1
+          col.default = d
 
   addTableNav: (table) ->
     rows = table.querySelectorAll('tr')
