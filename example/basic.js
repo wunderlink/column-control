@@ -4,6 +4,7 @@ var cc = require('../index.js');
 var table = require('./table.js')
 
 document.body.innerHTML = table;
+document.body.style.margin = '20px';
 
 var targetTable = document.querySelector('.target-table');
 var controls = document.querySelector('.table-controls');

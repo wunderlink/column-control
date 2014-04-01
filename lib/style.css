@@ -6,7 +6,6 @@
 }
 .ch-control {
   float:left;
-  height: 40px;
   font-size: 11px;
   border: 1px solid #aaa;
   padding: 3px;
@@ -51,9 +50,9 @@
   background-color: #fff;
   border: 1px solid #aaa;
   border-right: 0px;
-  padding: 5px 10px 5px 10px;
-  height: 19px;
-  width: 10px;
+  height: 30px;
+  width: 30px;
+  padding: 7px 0px 0px 10px;
   font-family: "arial";
 }
 

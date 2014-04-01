@@ -1,7 +1,7 @@
 module.exports =
-  [ '<div class="table_controls"></div>'
+  [ '<div class="table-controls"></div>'
   , '<br/><br/>'
-  , '<div class="table_holder">'
+  , '<div class="table-holder">'
   ,   '<table class="target-table table">'
   ,     '<thead>'
   ,       '<tr>'
