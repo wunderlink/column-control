@@ -1,4 +1,8 @@
 
+0.0.12 / 2014-03-31
+===================
+  - updated readme, fixed styles
+
 0.0.11 / 2014-03-31
 ===================
   - updated readme, fixed styles
