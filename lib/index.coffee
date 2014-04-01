@@ -17,7 +17,6 @@ class ColumnControl
     _this = @
     if opts.columns?
       @cols = opts.columns
-      console.log @cols
       controls = @getControls opts, @cols
     else
       @getColumnHeaders ->
@@ -110,7 +109,6 @@ class ColumnControl
       control = @buildControl data
       activeField.appendChild control
     div.appendChild ul
-    console.log div
     return div
 
   buildOption: (data) ->
