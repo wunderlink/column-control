@@ -4,8 +4,8 @@
   "description": "decorate an html table with basic column controls",
   "main": "index.js",
   "scripts": {
-    "example": "beefy example/basic.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "example": "beefy example/basic.js --live",
+    "test": "testling"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,9 @@
   "devDependencies": {
     "browserify": "~2.35.1",
     "coffee-script": "~1.6.3",
-    "beefy": "~0.4.2"
+    "beefy": "~0.4.2",
+    "tape": "^2.12.1",
+    "testling": "^1.6.1"
   },
   "dependencies": {
     "coffeeify": "~0.5.2",
@@ -31,6 +33,19 @@
     "transform": [
       "coffeeify",
       "cssify"
+    ]
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6",
+      "android-browser/latest"
     ]
   }
 }

@@ -13,15 +13,12 @@ class ColumnControl
     @table = opts.table
     @addTableNav @table
 
-    controls = ''
-    _this = @
     if opts.columns?
       @cols = opts.columns
-      console.log @cols
-      controls = @getControls opts, @cols
     else
-      @getColumnHeaders ->
-        controls = _this.getControls opts, _this.cols
+      @getColumnHeaders()
+
+    controls = @getControls opts, @cols
     return controls
 
   getControls: (opts, cols) ->
@@ -110,7 +107,6 @@ class ColumnControl
       control = @buildControl data
       activeField.appendChild control
     div.appendChild ul
-    console.log div
     return div
 
   buildOption: (data) ->
@@ -239,7 +235,7 @@ class ColumnControl
       else
         cell.style.display = "none"
 
-  getColumnHeaders: (cb) ->
+  getColumnHeaders: ->
     first = @table.querySelector('tr')
     headers = first.querySelectorAll('th') ? first.querySelectorAll('td')
     @cols = []
@@ -248,5 +244,4 @@ class ColumnControl
       @cols.push
         index: i
         title: title
-    cb()
 
