@@ -14,10 +14,10 @@
   "devDependencies": {
     "browserify": "~2.35.1",
     "coffee-script": "~1.6.3",
-    "beefy": "~0.4.2",
-    "coffeeify": "~0.5.2"
+    "beefy": "~0.4.2"
   },
   "dependencies": {
+    "coffeeify": "~0.5.2",
     "cssify": "~0.4.1"
   },
   "keywords": [
