@@ -2,6 +2,9 @@
 
 Input an html table. Output controls to hide / show / move columns of that table.
 
+[![browser support](https://ci.testling.com/wunderlink/column-control.png)
+](https://ci.testling.com/wunderlink/column-control.png)
+
 Controls:
 <img src="http://i.imgur.com/pUqHKqE.png" />
 
