@@ -1,4 +1,9 @@
 
+0.1.0 / 2014-04-17
+===================
+  - last version should have been greater
+
+
 0.0.17 / 2014-04-17
 ===================
   - updated whitespace & idioms
