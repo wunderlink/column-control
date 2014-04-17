@@ -31,15 +31,22 @@ If you do not use the "columns" option (detailed below), then column-control wil
 
 
 Options:
+```
+table -          (required) this is a reference to the table you are
+                 making controls for.
 
-table - (required) this is a reference to the table you are making controls for.
+defaultColumns - an array of the column titles you want shown upon load.
+                 Use this only if you are not using the "columns" option.
 
-defaultColumns - an array of the column titles you want shown upon load. Use this only if you are not using the "columns" option.
+columns -        this is an array of objects. each object holds options for
+                 that column and may contain:
 
-columns - this is an array of objects. each object holds options for that column and may contain:
+  title -             (string) what is displayed as the label in the
+                      drop down and button control
 
-  title - (string) what is displayed as the label in the drop down and button control
+  default -           (boolean) show/hide on load
 
-  default - (boolean) show/hide on load
-
-  additionalControl - (DOM element) use this is you'd like to drop some additional html into the button control for each column. Example coming soon.
+  additionalControl - (DOM element) use this is you'd like to drop some
+                      additional html into the button control for each
+                      column. Example coming soon.
+```
