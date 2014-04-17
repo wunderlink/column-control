@@ -9,5 +9,5 @@ document.body.style.margin = '20px';
 var targetTable = document.querySelector('.target-table');
 var controls = document.querySelector('.table-controls');
 
-var buttons = cc({table:targetTable, button_class:'btn'});
+var buttons = cc({table:targetTable});
 controls.appendChild(buttons);

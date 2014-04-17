@@ -1,4 +1,8 @@
 
+0.1.1 / 2014-04-17
+===================
+  - readme updated
+
 0.1.0 / 2014-04-17
 ===================
   - last version should have been greater
