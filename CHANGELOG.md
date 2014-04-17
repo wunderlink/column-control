@@ -1,4 +1,9 @@
 
+0.0.17 / 2014-04-17
+===================
+  - updated whitespace & idioms
+
+
 0.0.14 / 2014-03-31
 ===================
   - updated package.json
