@@ -9,12 +9,6 @@ document.body.style.margin = '20px';
 var targetTable = document.querySelector('.target-table');
 var controls = document.querySelector('.table-controls');
 
-var buttons = cc({table:targetTable});
-controls.appendChild(buttons);
-
-
-
-// Example using the columns option
 
 columns = [
   {title: 'Payment Frequency', default: 1},
@@ -27,3 +21,4 @@ columns = [
 
 var buttons = cc({table:targetTable, columns:columns});
 controls.appendChild(buttons);
+
