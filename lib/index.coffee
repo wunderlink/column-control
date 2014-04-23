@@ -35,7 +35,9 @@ class ColumnControl
 
   getDefaults: (opts, cols) ->
     d = true
-    d = false if col.default? for i, col of cols
+    for col in cols
+      if col.default?
+        d = false
 
     for i, col of cols
       col.index = i unless col.index?
@@ -43,7 +45,9 @@ class ColumnControl
       unless col.default?
         if opts.defaultColumns?
           col.default = 0
-          col.default = 1 if col.title is title for title in opts.defaultColumns
+          for title in opts.defaultColumns
+            if col.title is title
+              col.default = 1
         else
           @selectAll = 1
           col.default = d
