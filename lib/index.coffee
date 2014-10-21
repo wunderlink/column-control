@@ -59,27 +59,27 @@ class ColumnControl
       if cells.length < 1
         cells = row.querySelectorAll 'td'
       for cell, c in cells
-        cell.classList.add 'cc'+c
-        cell.classList.add 'rr'+r
+        cell.classList.add 'cc-c'+c
+        cell.classList.add 'cc-r'+r
 
   buildCheckboxSelect: (list) ->
     @controlHolder = document.createElement 'div'
-    @controlHolder.className = 'ch-holder'
+    @controlHolder.className = 'cc-holder'
 
     downArrow = document.createElement 'div'
-    downArrow.className = 'ch-down-arrow'
+    downArrow.className = 'cc-down-arrow'
     downArrow.innerHTML = '+'
 
     self = this
     downArrow.onclick = (e) ->
-      target = self.controlHolder.querySelector '.ch-list'
+      target = self.controlHolder.querySelector '.cc-list'
       if target.style.display is 'none'
         target.style.display = ''
       else
         target.style.display = 'none'
 
     listHolder = document.createElement 'div'
-    listHolder.className = 'ch-list-holder'
+    listHolder.className = 'cc-list-holder'
     listHolder.appendChild downArrow
 
     activeField = @buildSelectField()
@@ -92,13 +92,13 @@ class ColumnControl
 
   buildSelectField: ->
     b = document.createElement 'div'
-    b.className = 'ch-active'
+    b.className = 'cc-active'
     return b
 
   buildList: (list, activeField) ->
     div = document.createElement 'div'
     div.style.display = 'none'
-    div.className = 'ch-list'
+    div.className = 'cc-list'
     ul = document.createElement 'ul'
 
     selectAll =
@@ -122,7 +122,7 @@ class ColumnControl
   buildOption: (data) ->
     li = document.createElement 'li'
     li.setAttribute 'data-index', data.index
-    li.className = 'o'+data.index
+    li.className = 'cc-o'+data.index
 
     self = this
     li.onclick = (e) ->
@@ -153,12 +153,12 @@ class ColumnControl
     self = this
 
     div = document.createElement 'div'
-    div.className = 'o'+data.index
-    div.className += ' ch-control'
+    div.className = 'cc-o'+data.index
+    div.className += ' cc-control'
     div.setAttribute 'data-index', data.index
 
     left = document.createElement 'div'
-    left.className = 'ch-mini-btn'
+    left.className = 'cc-mini-btn'
     left.innerHTML = '<'
     left.onclick = (e) ->
       e.stopPropagation()
@@ -171,7 +171,7 @@ class ColumnControl
     div.appendChild title
 
     x = document.createElement('div')
-    x.className = 'ch-mini-btn'
+    x.className = 'cc-mini-btn'
     x.innerHTML = 'x'
     x.onclick = (e) ->
       e.stopPropagation()
@@ -180,7 +180,7 @@ class ColumnControl
     div.appendChild x
 
     right = document.createElement 'div'
-    right.className = 'ch-mini-btn'
+    right.className = 'cc-mini-btn'
     right.innerHTML = '>'
     right.onclick = (e) ->
       e.stopPropagation()
@@ -196,8 +196,8 @@ class ColumnControl
     return div
 
   moveColumn: (index, dir) ->
-    control = @controlHolder.querySelector '.ch-active .o' + index
-    activeControls = @controlHolder.querySelectorAll '.ch-active-col'
+    control = @controlHolder.querySelector '.cc-active .cc-o' + index
+    activeControls = @controlHolder.querySelectorAll '.cc-active-col'
 
     for control, i in activeControls
       cIndex = control.getAttribute 'data-index'
@@ -211,7 +211,7 @@ class ColumnControl
             # wrap to far right
             ref = null
             control.parentNode.insertBefore control, ref
-            col = @table.querySelectorAll '.cc' + index
+            col = @table.querySelectorAll '.cc-c' + index
             for cell, i in col
               cell.parentNode.insertBefore cell, null
         else
@@ -225,14 +225,14 @@ class ColumnControl
 
 
   moveColumnBefore: (index, newIndex, after = false) ->
-    control = @controlHolder.querySelector '.ch-active .o' + index
-    ref = @controlHolder.querySelector '.ch-active .o' + newIndex
+    control = @controlHolder.querySelector '.cc-active .cc-o' + index
+    ref = @controlHolder.querySelector '.cc-active .cc-o' + newIndex
     if after
       ref.parentNode.insertBefore ref, control
     else
       control.parentNode.insertBefore control, ref
-    col = @table.querySelectorAll '.cc' + index
-    nCol = @table.querySelectorAll '.cc' + newIndex
+    col = @table.querySelectorAll '.cc-c' + index
+    nCol = @table.querySelectorAll '.cc-c' + newIndex
     for cell, i in col
       cRef = nCol[i]
       if after
@@ -243,7 +243,7 @@ class ColumnControl
 
   selectOption: (index) ->
     if index is 'sa'
-      input = @controlHolder.querySelector ".o#{index} input[type='checkbox']"
+      input = @controlHolder.querySelector ".cc-o#{index} input[type='checkbox']"
       turnOn = false
       if input.checked is true
         turnOn = true
@@ -251,29 +251,29 @@ class ColumnControl
         @updateActive item.index, turnOn
     else
       turnOn = 0
-      if @table.querySelector('.cc' + index).style.display is 'none'
+      if @table.querySelector('.cc-c' + index).style.display is 'none'
         turnOn = 1
       @updateActive index, turnOn
 
   updateActive: (index, turnOn) ->
-    input = @controlHolder.querySelector ".o#{index} input[type='checkbox']"
-    control = @controlHolder.querySelector ".ch-active .o#{index}"
-    col = @table.querySelectorAll '.cc' + index
+    input = @controlHolder.querySelector ".cc-o#{index} input[type='checkbox']"
+    control = @controlHolder.querySelector ".cc-active .cc-o#{index}"
+    col = @table.querySelectorAll '.cc-c' + index
     if turnOn
       input.checked = true
       control.style.display = ''
-      control.classList.add 'ch-active-col'
+      control.classList.add 'cc-active-col'
     else
-      sa = @controlHolder.querySelector '.osa input[type="checkbox"]'
+      sa = @controlHolder.querySelector '.cc-osa input[type="checkbox"]'
       sa.checked = false
       input.checked = false
       control.style.display = 'none'
-      control.classList.remove 'ch-active-col'
+      control.classList.remove 'cc-active-col'
 
     @toggleColumn index, turnOn
 
   toggleColumn: (index, isOn) ->
-    col = @table.querySelectorAll '.cc'+index
+    col = @table.querySelectorAll '.cc-c'+index
 
     for cell, c in col
       if isOn

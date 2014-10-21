@@ -1,12 +1,12 @@
-.ch-active {
+.cc-active {
   float:left;
   border: 1px solid #aaa;
   min-height: 29px;
   min-width: 169px;
 }
-.ch-active-col {
+.cc-active-col {
 }
-.ch-control {
+.cc-control {
   float:left;
   font-size: 11px;
   border: 1px solid #aaa;
@@ -14,11 +14,11 @@
   margin: 2px;
   background-color: #CCC;
 }
-.ch-control > div {
+.cc-control > div {
   padding: 2px;
   float:left;
 }
-.ch-list {
+.cc-list {
   background: #fff;
   position: absolute;
   left: 0px;
@@ -28,27 +28,27 @@
   -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
   box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
 }
-.ch-list > ul {
+.cc-list > ul {
   list-style: none;
   max-height: 300px;
   overflow: auto;
   padding: 0px;
   margin: 0px;
 }
-.ch-list li {
+.cc-list li {
   padding: 4px 4px 4px 6px;
 }
-.ch-list li * {
+.cc-list li * {
   display: inline;
 }
-.ch-list li label {
+.cc-list li label {
   padding: 0px 0px 0px 5px;
 }
-.ch-mini-btn {
+.cc-mini-btn {
   color: #999;
 }
 
-.ch-down-arrow {
+.cc-down-arrow {
   background-color: #fff;
   border: 1px solid #aaa;
   border-right: 0px;
@@ -58,11 +58,11 @@
   font-family: "arial";
 }
 
-.ch-list-holder {
+.cc-list-holder {
   position: relative;
   float: left;
 }
 
-.ch-holder {
+.cc-holder {
   line-height: normal;
 }
