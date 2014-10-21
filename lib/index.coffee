@@ -59,8 +59,8 @@ class ColumnControl
       if cells.length < 1
         cells = row.querySelectorAll 'td'
       for cell, c in cells
-        cell.classList.add 'c'+c
-        cell.classList.add 'r'+r
+        cell.classList.add 'cc'+c
+        cell.classList.add 'rr'+r
 
   buildCheckboxSelect: (list) ->
     @controlHolder = document.createElement 'div'
@@ -197,22 +197,49 @@ class ColumnControl
 
   moveColumn: (index, dir) ->
     control = @controlHolder.querySelector '.ch-active .o' + index
+    activeControls = @controlHolder.querySelectorAll '.ch-active-col'
 
-    if dir is 'left'
-      target = 'previousElementSibling'
-      control.parentNode.insertBefore control, control[target]
-      col = @table.querySelectorAll '.c' + index
-      for cell in col
-        cell.parentNode.insertBefore cell, cell[target]
+    for control, i in activeControls
+      cIndex = control.getAttribute 'data-index'
+      if cIndex is index
+        if dir is 'left'
+          mod = -1
+          if activeControls[i+mod]?
+            newIndex = activeControls[i+mod].getAttribute 'data-index'
+            @moveColumnBefore index, newIndex
+          else
+            # wrap to far right
+            ref = null
+            control.parentNode.insertBefore control, ref
+            col = @table.querySelectorAll '.cc' + index
+            for cell, i in col
+              cell.parentNode.insertBefore cell, null
+        else
+          mod = 1
+          if activeControls[i+mod]?
+            newIndex = activeControls[i+mod].getAttribute 'data-index'
+            @moveColumnBefore index, newIndex, true
+          else
+            newIndex = activeControls[0].getAttribute 'data-index'
+            @moveColumnBefore index, newIndex
 
+
+  moveColumnBefore: (index, newIndex, after = false) ->
+    control = @controlHolder.querySelector '.ch-active .o' + index
+    ref = @controlHolder.querySelector '.ch-active .o' + newIndex
+    if after
+      ref.parentNode.insertBefore ref, control
     else
-      target = 'nextElementSibling'
-      next = control[target]
-      control.parentNode.insertBefore control, next[target]
-      col = @table.querySelectorAll '.c' + index
-      for cell in col
-        next = cell[target]
-        cell.parentNode.insertBefore cell, next[target]
+      control.parentNode.insertBefore control, ref
+    col = @table.querySelectorAll '.cc' + index
+    nCol = @table.querySelectorAll '.cc' + newIndex
+    for cell, i in col
+      cRef = nCol[i]
+      if after
+        cRef.parentNode.insertBefore cRef, cell
+      else
+        cell.parentNode.insertBefore cell, cRef
+
 
   selectOption: (index) ->
     if index is 'sa'
@@ -224,27 +251,29 @@ class ColumnControl
         @updateActive item.index, turnOn
     else
       turnOn = 0
-      if @table.querySelector('.c' + index).style.display is 'none'
+      if @table.querySelector('.cc' + index).style.display is 'none'
         turnOn = 1
       @updateActive index, turnOn
 
   updateActive: (index, turnOn) ->
     input = @controlHolder.querySelector ".o#{index} input[type='checkbox']"
     control = @controlHolder.querySelector ".ch-active .o#{index}"
-    col = @table.querySelectorAll '.c' + index
+    col = @table.querySelectorAll '.cc' + index
     if turnOn
       input.checked = true
       control.style.display = ''
+      control.classList.add 'ch-active-col'
     else
       sa = @controlHolder.querySelector '.osa input[type="checkbox"]'
       sa.checked = false
       input.checked = false
       control.style.display = 'none'
+      control.classList.remove 'ch-active-col'
 
     @toggleColumn index, turnOn
 
   toggleColumn: (index, isOn) ->
-    col = @table.querySelectorAll '.c'+index
+    col = @table.querySelectorAll '.cc'+index
 
     for cell, c in col
       if isOn
