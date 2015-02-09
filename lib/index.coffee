@@ -15,6 +15,7 @@ class ColumnControl
     @table = opts.table
     @addTableNav @table
 
+    @opts = opts
     if opts.columns?
       @cols = opts.columns
     else
@@ -167,7 +168,9 @@ class ColumnControl
     div.appendChild left
 
     title = document.createElement 'div'
-    title.innerHTML = data.title
+    title.className = 'cc-title'
+    if !@opts.noTitle
+      title.innerHTML = data.title
     div.appendChild title
 
     x = document.createElement('div')
