@@ -15,6 +15,10 @@ class ColumnControl
     @table = opts.table
     @addTableNav @table
 
+    @name = false
+    if opts.name?
+      @name = opts.name
+
     @opts = opts
     if opts.columns?
       @cols = opts.columns
@@ -25,16 +29,23 @@ class ColumnControl
     return controls
 
   getControls: (opts, cols) ->
-    @getDefaults opts, cols
+    userDefaults = []
+    if @name and localStorage['cc:'+@name]
+      userDefaults = JSON.parse localStorage['cc:'+@name]
+    @getDefaults opts, cols, userDefaults
     controls = @buildCheckboxSelect cols
 
     for data in cols
       @updateActive data.index, data.default
       @toggleColumn data.index, data.default
 
+    tmp = userDefaults.reverse()
+    for ud, i in tmp
+      if i > 0
+        @moveColumnBefore ud, tmp[i-1]
     return controls
 
-  getDefaults: (opts, cols) ->
+  getDefaults: (opts, cols, userDefaults) ->
     d = true
     for col in cols
       if col.default?
@@ -43,15 +54,21 @@ class ColumnControl
     for i, col of cols
       col.index = i unless col.index?
 
-      unless col.default?
-        if opts.defaultColumns?
-          col.default = 0
-          for title in opts.defaultColumns
-            if col.title is title
-              col.default = 1
+      if userDefaults.length > 0
+        if userDefaults.indexOf(Number(i)) > -1
+          col.default = 1
         else
-          @selectAll = 1
-          col.default = d
+          col.default = 0
+      else
+        unless col.default?
+          if opts.defaultColumns?
+            col.default = 0
+            for title in opts.defaultColumns
+              if col.title is title
+                col.default = 1
+          else
+            @selectAll = 1
+            col.default = d
 
   addTableNav: (table) ->
     rows = table.querySelectorAll 'tr'
@@ -165,6 +182,7 @@ class ColumnControl
       e.stopPropagation()
       index = @parentNode.getAttribute 'data-index'
       self.moveColumn index, 'left'
+      self.saveState()
     div.appendChild left
 
     title = document.createElement 'div'
@@ -180,6 +198,7 @@ class ColumnControl
       e.stopPropagation()
       index = @parentNode.getAttribute 'data-index'
       self.updateActive index, 0
+      self.saveState()
     div.appendChild x
 
     right = document.createElement 'div'
@@ -189,6 +208,7 @@ class ColumnControl
       e.stopPropagation()
       index = @parentNode.getAttribute 'data-index'
       self.moveColumn index, 'right'
+      self.saveState()
     div.appendChild right
 
     if data.additionalControl?
@@ -257,6 +277,7 @@ class ColumnControl
       if @table.querySelector('.cc-c' + index).style.display is 'none'
         turnOn = 1
       @updateActive index, turnOn
+    @saveState()
 
   updateActive: (index, turnOn) ->
     input = @controlHolder.querySelector ".cc-o#{index} input[type='checkbox']"
@@ -274,6 +295,16 @@ class ColumnControl
       control.classList.remove 'cc-active-col'
 
     @toggleColumn index, turnOn
+
+  saveState: ->
+    if !@name
+      return
+    cols = @controlHolder.querySelectorAll ".cc-active-col"
+    activeSet = []
+    for col in cols
+      activeSet.push Number(col.getAttribute 'data-index')
+    localStorage['cc:'+@name] = JSON.stringify activeSet
+    console.log 'Save State', activeSet
 
   toggleColumn: (index, isOn) ->
     col = @table.querySelectorAll '.cc-c'+index
