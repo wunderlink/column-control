@@ -1,6 +1,6 @@
 {
   "name": "column-control",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "decorate an html table with basic column controls",
   "main": "index.js",
   "scripts": {
