@@ -1,5 +1,4 @@
 
-require('./style.css')
 
 
 module.exports = (opts={}) ->
@@ -8,6 +7,7 @@ module.exports = (opts={}) ->
 
 class ColumnControl
   table: ''
+  style: true
 
   controlHolder: ''
 
@@ -19,14 +19,22 @@ class ColumnControl
     if opts.name?
       @name = opts.name
 
+    if opts.style?
+      @style = opts.style
+
+    if @style
+      require('./style.css')
+
     @opts = opts
     if opts.columns?
       @cols = opts.columns
     else
       @getColumnHeaders()
 
-    controls = @getControls opts, @cols
-    return controls
+    @elements = {}
+    @elements.cols = []
+
+    @controls = @getControls opts, @cols
 
   getControls: (opts, cols) ->
     userDefaults = []
@@ -89,12 +97,6 @@ class ColumnControl
     downArrow.innerHTML = '+'
 
     self = this
-    downArrow.onclick = (e) ->
-      target = self.controlHolder.querySelector '.cc-list'
-      if target.style.display is 'none'
-        target.style.display = ''
-      else
-        target.style.display = 'none'
 
     listHolder = document.createElement 'div'
     listHolder.className = 'cc-list-holder'
@@ -102,9 +104,23 @@ class ColumnControl
 
     activeField = @buildSelectField()
 
-    listHolder.appendChild @buildList list, activeField
+    list = @buildList list, activeField
+    listHolder.appendChild list
+    @elements.fieldList = list
+
     @controlHolder.appendChild listHolder
     @controlHolder.appendChild activeField
+
+    downArrow.onclick = (e) ->
+      target = self.elements.fieldList
+      console.log "TART", target
+      if target.style.display is 'none'
+        target.style.display = 'block'
+      else
+        target.style.display = 'none'
+
+    @elements.columnsButton = downArrow
+
 
     return @controlHolder
 
@@ -114,10 +130,13 @@ class ColumnControl
     return b
 
   buildList: (list, activeField) ->
+    ###
     div = document.createElement 'div'
     div.style.display = 'none'
     div.className = 'cc-list'
+    ###
     ul = document.createElement 'ul'
+    ul.className = 'cc-list'
 
     selectAll =
       index: 'sa'
@@ -133,9 +152,9 @@ class ColumnControl
       control = @buildControl data
       activeField.appendChild control
 
-    div.appendChild ul
+    #div.appendChild ul
 
-    return div
+    return ul
 
   buildOption: (data) ->
     li = document.createElement 'li'
@@ -144,31 +163,31 @@ class ColumnControl
 
     self = this
     li.onclick = (e) ->
-      if e.target.type isnt 'checkbox'
-        target = @querySelector 'input'
-        if target.checked is true
-          target.checked = false
-        else
-          target.checked = true
+      if this.classList.contains('active')
+        this.classList.remove 'active'
       else
-        target = e.target
+        this.classList.add 'active'
       index = @getAttribute 'data-index'
       self.selectOption index
 
+    ###
     ch = document.createElement 'input'
     ch.type = 'checkbox'
     ch.checked = true if data.default
+    ###
 
-    la = document.createElement 'label'
+    la = document.createElement 'a'
     la.innerHTML = data.title
 
-    li.appendChild ch
+    #li.appendChild ch
     li.appendChild la
 
     return li
 
   buildControl: (data) ->
     self = this
+
+    obs = {}
 
     div = document.createElement 'div'
     div.className = 'cc-o'+data.index
@@ -177,13 +196,16 @@ class ColumnControl
 
     left = document.createElement 'div'
     left.className = 'cc-mini-btn'
+    left.setAttribute 'data-index', data.index
     left.innerHTML = '<'
     left.onclick = (e) ->
       e.stopPropagation()
-      index = @parentNode.getAttribute 'data-index'
+      index = this.getAttribute 'data-index'
       self.moveColumn index, 'left'
       self.saveState()
     div.appendChild left
+
+    obs.left = left
 
     title = document.createElement 'div'
     title.className = 'cc-title'
@@ -193,28 +215,37 @@ class ColumnControl
 
     x = document.createElement('div')
     x.className = 'cc-mini-btn'
+    x.setAttribute 'data-index', data.index
     x.innerHTML = 'x'
     x.onclick = (e) ->
       e.stopPropagation()
-      index = @parentNode.getAttribute 'data-index'
+      index = this.getAttribute 'data-index'
       self.updateActive index, 0
       self.saveState()
     div.appendChild x
 
+    obs.close = x
+
     right = document.createElement 'div'
     right.className = 'cc-mini-btn'
+    right.setAttribute 'data-index', data.index
     right.innerHTML = '>'
     right.onclick = (e) ->
       e.stopPropagation()
-      index = @parentNode.getAttribute 'data-index'
+      index = this.getAttribute 'data-index'
       self.moveColumn index, 'right'
       self.saveState()
     div.appendChild right
+
+    obs.right = right
 
     if data.additionalControl?
       d = document.createElement 'br'
       div.appendChild d
       div.appendChild data.additionalControl
+      obs.additional = data.additionalControl
+
+    @elements.cols.push obs
 
     return div
 
@@ -222,13 +253,18 @@ class ColumnControl
     control = @controlHolder.querySelector '.cc-active .cc-o' + index
     activeControls = @controlHolder.querySelectorAll '.cc-active-col'
 
+    console.log 'CNTS', control
+    console.log 'IN', index
+    console.log 'AC', activeControls
     for control, i in activeControls
       cIndex = control.getAttribute 'data-index'
+      console.log "Con", cIndex
       if cIndex is index
         if dir is 'left'
           mod = -1
           if activeControls[i+mod]?
             newIndex = activeControls[i+mod].getAttribute 'data-index'
+            console.log "ENW INDEX", newIndex
             @moveColumnBefore index, newIndex
           else
             # wrap to far right
@@ -266,9 +302,9 @@ class ColumnControl
 
   selectOption: (index) ->
     if index is 'sa'
-      input = @controlHolder.querySelector ".cc-o#{index} input[type='checkbox']"
+      input = @elements.fieldList.querySelector ".cc-o#{index}"
       turnOn = false
-      if input.checked is true
+      if input.classList.contains('active')
         turnOn = true
       for item in @cols
         @updateActive item.index, turnOn
@@ -280,17 +316,17 @@ class ColumnControl
     @saveState()
 
   updateActive: (index, turnOn) ->
-    input = @controlHolder.querySelector ".cc-o#{index} input[type='checkbox']"
+    input = @elements.fieldList.querySelector ".cc-o#{index}"
     control = @controlHolder.querySelector ".cc-active .cc-o#{index}"
     col = @table.querySelectorAll '.cc-c' + index
     if turnOn
-      input.checked = true
+      input.classList.add 'active'
       control.style.display = ''
       control.classList.add 'cc-active-col'
     else
-      sa = @controlHolder.querySelector '.cc-osa input[type="checkbox"]'
-      sa.checked = false
-      input.checked = false
+      sa = @elements.fieldList.querySelector '.cc-osa'
+      sa.classList.remove 'active'
+      input.classList.remove 'active'
       control.style.display = 'none'
       control.classList.remove 'cc-active-col'
 
