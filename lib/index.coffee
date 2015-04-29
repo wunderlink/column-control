@@ -113,7 +113,6 @@ class ColumnControl
 
     downArrow.onclick = (e) ->
       target = self.elements.fieldList
-      console.log "TART", target
       if target.style.display is 'none'
         target.style.display = 'block'
       else
@@ -253,18 +252,13 @@ class ColumnControl
     control = @controlHolder.querySelector '.cc-active .cc-o' + index
     activeControls = @controlHolder.querySelectorAll '.cc-active-col'
 
-    console.log 'CNTS', control
-    console.log 'IN', index
-    console.log 'AC', activeControls
     for control, i in activeControls
       cIndex = control.getAttribute 'data-index'
-      console.log "Con", cIndex
       if cIndex is index
         if dir is 'left'
           mod = -1
           if activeControls[i+mod]?
             newIndex = activeControls[i+mod].getAttribute 'data-index'
-            console.log "ENW INDEX", newIndex
             @moveColumnBefore index, newIndex
           else
             # wrap to far right
@@ -340,7 +334,6 @@ class ColumnControl
     for col in cols
       activeSet.push Number(col.getAttribute 'data-index')
     localStorage['cc:'+@name] = JSON.stringify activeSet
-    console.log 'Save State', activeSet
 
   toggleColumn: (index, isOn) ->
     col = @table.querySelectorAll '.cc-c'+index
