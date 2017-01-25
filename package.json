@@ -19,6 +19,7 @@
     "testling": "^1.6.1"
   },
   "dependencies": {
+    "browserify": "~2.35.1",
     "coffeeify": "~0.5.2",
     "cssify": "~0.4.1"
   },
